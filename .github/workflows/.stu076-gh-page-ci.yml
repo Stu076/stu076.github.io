@@ -15,27 +15,42 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  lint:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+      
+      - name: Lint
+        run: echo Linting...
+  
+  format:
+    runs-on: ubuntu-latest
+    steps:
       - uses: actions/checkout@v4
 
-      # Runs linter and formatter
-      - name: Lint & Format
-        run: echo Doing linting & formatting!
+      - name: Format
+        run: echo Formatting...
 
-      # Run unit tests
-      - name: Unit Test
-        run: echo Doing unit tests!
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-      # Run E2E tests
-      - name: E2E tests
-        run: echo Doing E2E tests!
+      - name: Unit
+        run: echo Unit testing...
+    
+  e2e-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: E2E
+        run: echo E2E testing...
+        
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
       # Build app
       - name: Build App
