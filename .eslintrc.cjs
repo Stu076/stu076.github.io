@@ -19,6 +19,15 @@ module.exports = {
 		es2017: true,
 		node: true
 	},
+	rules: {
+		'no-shadow': 'off',
+		'@typescript-eslint/no-shadow': 'error',
+		'@typescript-eslint/no-var-requires': 'error',
+		'@typescript-eslint/no-empty-function': 'error',
+		'@typescript-eslint/explicit-function-return-type': 'error',
+		'@typescript-eslint/explicit-module-boundary-types': 'error',
+		'@typescript-eslint/no-explicit-any': 'error'
+	},
 	overrides: [
 		{
 			files: ['*.svelte'],
