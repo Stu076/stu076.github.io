@@ -6,10 +6,15 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter({ strict: false }),
+		adapter: adapter({ 
+			strict: false,
+			pages: "build",
+			assets: "build",
+			fallback: "index.html",
+		}),
 		paths: {
-            base: process.env.NODE_ENV === 'production' ? '/index' : '',
-        }
+            base: process.env.NODE_ENV === 'production' ? '/jans-page' : '',
+        },
 	}
 };
 
