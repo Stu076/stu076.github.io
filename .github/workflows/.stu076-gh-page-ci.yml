@@ -4,84 +4,82 @@ name: CI
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    # Triggers the workflow on push or pull request events but only for the "main" branch
+    push:
+        branches: ["main"]
+    pull_request:
+        branches: ["main"]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
 
-  
 permissions:
-  id-token: write
-  pages: write
+    id-token: write
+    pages: write
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Lint
-        run: echo Linting...
-  
-  format:
-    needs: lint
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    lint:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Format
-        run: echo Formatting...
+            - name: Lint
+              run: echo Linting...
 
-  unit-test:
-    needs: format
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    format:
+        needs: lint
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      - name: Unit
-        run: echo Unit testing...
-    
-  e2e-test:
-    needs: unit-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+            - name: Format
+              run: echo Formatting...
 
-      - name: E2E
-        run: echo E2E testing...
-        
-  build:
-    needs: e2e-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    unit-test:
+        needs: format
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-      # Build app
-      - name: Build App
-        run: |
-          npm install
-          npm run build
-      
-      - name: Uplpoad Artifacts
-        uses: actions/upload-pages-artifact@v3.0.1
-        with:
-          path: 'build/'
+            - name: Unit
+              run: echo Unit testing...
 
+    e2e-test:
+        needs: unit-test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
+            - name: E2E
+              run: echo E2E testing...
 
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    build:
+        needs: e2e-test
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
 
-    steps:
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4.0.5
+            # Build app
+            - name: Build App
+              run: |
+                  npm install
+                  npm run build
+
+            - name: Uplpoad Artifacts
+              uses: actions/upload-pages-artifact@v3.0.1
+              with:
+                  path: "build/"
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+
+        environment:
+            name: github-pages
+            url: ${{ steps.deployment.outputs.page_url }}
+
+        steps:
+            - name: Deploy
+              id: deployment
+              uses: actions/deploy-pages@v4.0.5
