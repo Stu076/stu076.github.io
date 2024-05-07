@@ -24,6 +24,7 @@ jobs:
         run: echo Linting...
   
   format:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +33,7 @@ jobs:
         run: echo Formatting...
 
   unit-test:
+    needs: format
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,6 +42,7 @@ jobs:
         run: echo Unit testing...
     
   e2e-test:
+    needs: unit-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -48,6 +51,7 @@ jobs:
         run: echo E2E testing...
         
   build:
+    needs: e2e-test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -57,9 +61,22 @@ jobs:
         run: |
           npm install
           npm run build
+      
+      - name: Uplpoad Artifacts
+        uses: actions/upload-pages-artifact@v3.0.1
+        with:
+          path: 'build/'
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4.0.5

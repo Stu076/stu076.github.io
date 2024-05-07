@@ -1,2 +1,15 @@
-<h1>Welcome to My Page</h1>
-<p>We will resume shortly ._.</p>
+<script>
+    import "../app.css";
+</script>
+  
+<slot />
+
+<h1 class="text-3xl font-bold underline">
+    Welcome to my portfolio!
+</h1>
+  
+<style lang="postcss">
+    :global(html) {
+      background-color: theme(colors.amber.500);
+    }
+</style>
