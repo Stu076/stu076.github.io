@@ -1,7 +1,5 @@
-<h1 class="text-3xl font-bold underline">Welcome to my portfolio!</h1>
+<script>
+    import Main from "../components/Main.svelte";
+</script>
 
-<style lang="postcss">
-	:global(html) {
-		background-color: theme(colors.amber.500);
-	}
-</style>
+<Main/>
